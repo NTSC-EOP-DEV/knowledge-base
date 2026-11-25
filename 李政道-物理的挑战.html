@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物理的挑战 · 李政道｜科普长卷</title>
+<meta name="description" content="2001 年李政道在北京人民大会堂的演讲《物理的挑战》科普图文版：从费米的反应堆到对称破缺，从甲骨文新星到暗物质与类星体。">
+<style>
+:root{
+  --paper:#f7f3ec;
+  --paper-2:#efe9de;
+  --ink:#1a1a1a;
+  --ink-soft:#3d3832;
+  --muted:#8a8178;
+  --line:#e2dacb;
+  --indigo:#1f3b57;
+  --indigo-deep:#101d2b;
+  --cinnabar:#9e3b2c;
+  --gold:#a9894e;
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.95;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+/* 纸面细纹 */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(169,137,78,.07), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, rgba(31,59,87,.06), transparent 60%);
+}
+img{max-width:100%;display:block}
+a{color:var(--indigo);text-decoration:none;border-bottom:1px solid rgba(31,59,87,.25)}
+a:hover{color:var(--cinnabar);border-bottom-color:rgba(158,59,44,.4)}
+/* 顶部进度 */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--cinnabar);z-index:100;transition:width .1s linear}
+/* 导航 */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:90;
+  background:rgba(247,243,236,.86);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:0 20px;height:52px;
+  display:flex;align-items:center;gap:22px;overflow-x:auto;scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-brand{
+  font-size:15px;letter-spacing:.18em;color:var(--ink);white-space:nowrap;
+  border:0;font-weight:600;
+}
+.nav a.nav-link{
+  font-family:var(--sans);font-size:13px;color:var(--muted);white-space:nowrap;
+  border:0;letter-spacing:.06em;padding:4px 0;position:relative;
+}
+.nav a.nav-link::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--cinnabar);
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
+}
+.nav a.nav-link:hover::after,.nav a.nav-link.active::after{transform:scaleX(1)}
+.nav a.nav-link.active{color:var(--cinnabar)}
+/* 封面 */
+.hero{
+  position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;
+  background:#101d2b;overflow:hidden;
+}
+.hero img.hero-bg{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:.85;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(9,15,24,.35) 0%,rgba(9,15,24,.45) 45%,rgba(9,15,24,.92) 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;width:100%;max-width:1180px;margin:0 auto;
+  padding:0 28px 76px;color:#f3ede2;
+}
+.hero-kicker{
+  font-family:var(--sans);font-size:12px;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(243,237,226,.7);margin-bottom:26px;
+}
+.hero h1{
+  margin:0 0 8px;font-size:clamp(52px,9vw,108px);line-height:1.08;
+  letter-spacing:.06em;font-weight:700;
+}
+.hero h1 em{font-style:normal;color:#d8b877}
+.hero-sub{
+  font-size:clamp(15px,1.8vw,19px);color:rgba(243,237,226,.82);
+  max-width:640px;margin:18px 0 34px;line-height:1.85;
+}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  font-family:var(--sans);font-size:12px;letter-spacing:.08em;
+  border:1px solid rgba(243,237,226,.28);border-radius:999px;
+  padding:7px 16px;color:rgba(243,237,226,.85);
+}
+.scroll-hint{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:2;
+  font-family:var(--sans);font-size:11px;letter-spacing:.3em;color:rgba(243,237,226,.5);
+  writing-mode:vertical-rl;
+}
+/* 正文容器 */
+main{position:relative;z-index:1}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.article{max-width:720px;margin:0 auto}
+.article p{margin:0 0 1.45em;text-align:justify;hyphens:auto}
+.article p.indent{text-indent:0}
+strong{font-weight:700;color:#111}
+.hl{background:linear-gradient(transparent 62%,rgba(169,137,78,.33) 62%);padding:0 2px}
+/* 导读 */
+.intro{padding:76px 0 10px}
+.intro .kicker{
+  font-family:var(--sans);font-size:12px;letter-spacing:.34em;color:var(--cinnabar);
+  margin-bottom:20px;
+}
+.intro h2{
+  font-size:clamp(26px,3.4vw,36px);line-height:1.5;margin:0 0 26px;font-weight:700;letter-spacing:.02em;
+}
+.intro .lede{font-size:19px;line-height:2.05;color:var(--ink-soft);margin:0 0 34px}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin:8px 0 10px;
+}
+.stat{background:var(--paper);padding:22px 18px}
+.stat b{display:block;font-size:clamp(24px,3vw,32px);color:var(--indigo);letter-spacing:.02em;line-height:1.2}
+.stat span{font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.06em}
+/* 章节 */
+section.chapter{padding:74px 0 6px;position:relative;scroll-margin-top:64px}
+.sec-head{margin-bottom:34px}
+.sec-num{
+  font-family:var(--sans);font-size:12px;letter-spacing:.34em;color:var(--cinnabar);
+  display:block;margin-bottom:14px;
+}
+.sec-head h2{
+  font-size:clamp(28px,4vw,42px);line-height:1.35;margin:0;font-weight:700;letter-spacing:.02em;
+}
+.sec-head .sub{font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:12px;letter-spacing:.04em}
+/* 大引文 */
+blockquote.pull{
+  margin:48px 0;padding:8px 0 8px 26px;border-left:3px solid var(--cinnabar);
+  font-size:clamp(19px,2.4vw,24px);line-height:1.85;color:var(--indigo);font-weight:600;
+}
+blockquote.pull cite{
+  display:block;margin-top:14px;font-family:var(--sans);font-size:12px;font-style:normal;
+  color:var(--muted);letter-spacing:.08em;font-weight:400;
+}
+/* 古诗 */
+.poem{
+  margin:44px auto;text-align:center;letter-spacing:.12em;color:var(--ink-soft);
+  font-size:clamp(19px,2.4vw,23px);line-height:2.1;
+}
+.poem .poem-src{display:block;margin-top:12px;font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.12em}
+/* 图 */
+figure{margin:52px 0}
+figure img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:3px;box-shadow:0 18px 40px -22px rgba(16,20,26,.45)}
+figure.tall img{aspect-ratio:3/4}
+figcaption{
+  margin-top:14px;padding-left:14px;border-left:2px solid var(--gold);
+  font-family:var(--sans);font-size:13px;line-height:1.8;color:var(--muted);
+}
+.wide{width:min(920px,92vw);position:relative;left:50%;transform:translateX(-50%)}
+@media(max-width:1000px){.wide{width:100%;left:0;transform:none}}
+/* 时间线 */
+.timeline{list-style:none;margin:44px 0;padding:0;border-top:1px solid var(--line)}
+.timeline li{
+  display:grid;grid-template-columns:78px 1fr auto;gap:16px;align-items:baseline;
+  padding:15px 4px;border-bottom:1px solid var(--line);
+}
+.timeline .y{font-family:var(--sans);font-size:13px;color:var(--cinnabar);letter-spacing:.04em}
+.timeline .t{font-size:16px;line-height:1.75}
+.timeline .a{
+  font-family:var(--sans);font-size:12px;color:var(--indigo);white-space:nowrap;
+  border:1px solid rgba(31,59,87,.22);border-radius:999px;padding:2px 10px;
+}
+.timeline li.key{background:linear-gradient(90deg,rgba(169,137,78,.1),transparent)}
+/* 四问卡片 */
+.qgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:44px 0}
+.qcard{
+  border:1px solid var(--line);background:rgba(255,255,255,.45);
+  padding:26px 24px;position:relative;
+}
+.qcard .qn{
+  font-family:var(--sans);font-size:12px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:12px;
+}
+.qcard h3{margin:0 0 10px;font-size:19px;line-height:1.5}
+.qcard p{margin:0;font-size:15px;line-height:1.85;color:var(--ink-soft)}
+/* 表格 */
+.tablewrap{margin:44px 0;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+caption{caption-side:top;text-align:left;font-family:var(--sans);font-size:13px;color:var(--muted);padding-bottom:10px}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--sans);font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500;border-bottom:1px solid var(--ink-soft)}
+tbody tr:hover{background:rgba(169,137,78,.06)}
+td.num{font-family:var(--sans);color:var(--cinnabar);white-space:nowrap}
+/* 解读区 */
+.interpret{
+  margin-top:80px;padding:0;background:var(--paper-2);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.interpret .inner{max-width:820px;margin:0 auto;padding:72px 24px 60px}
+.interpret .tag{
+  display:inline-block;font-family:var(--sans);font-size:11px;letter-spacing:.28em;
+  color:var(--paper);background:var(--indigo);padding:5px 12px;margin-bottom:24px;
+}
+.interpret h2{font-size:clamp(26px,3.6vw,38px);margin:0 0 10px;line-height:1.4}
+.interpret h3{font-size:20px;margin:42px 0 14px;color:var(--indigo)}
+.interpret p{color:var(--ink-soft);text-align:justify}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:30px 0}
+.step{background:var(--paper);padding:18px 14px}
+.step b{display:block;font-size:20px;color:var(--cinnabar);margin-bottom:6px}
+.step span{font-family:var(--sans);font-size:12px;color:var(--ink-soft);line-height:1.6;display:block}
+.takeaway{
+  margin:48px 0 0;padding:34px 30px;background:var(--indigo);color:#efe7d8;
+  font-size:clamp(17px,2.2vw,21px);line-height:1.95;
+}
+.takeaway small{
+  display:block;font-family:var(--sans);font-size:11px;letter-spacing:.28em;
+  color:rgba(239,231,216,.6);margin-bottom:14px;
+}
+/* 页脚 */
+footer{padding:60px 0 80px;background:#0e1720;color:rgba(243,237,226,.72)}
+.foot-inner{max-width:820px;margin:0 auto;padding:0 24px}
+footer h3{font-family:var(--sans);font-size:12px;letter-spacing:.28em;color:rgba(243,237,226,.5);margin:0 0 18px;font-weight:500}
+footer ol{margin:0 0 34px;padding-left:1.2em;font-size:13px;line-height:2;font-family:var(--sans)}
+footer a{color:rgba(216,184,119,.95);border-bottom-color:rgba(216,184,119,.3)}
+footer a:hover{color:#fff;border-bottom-color:#fff}
+footer .note{font-size:12px;line-height:1.9;color:rgba(243,237,226,.42);border-top:1px solid rgba(243,237,226,.12);padding-top:22px}
+/* 回顶 */
+#toTop{
+  position:fixed;right:22px;bottom:26px;z-index:80;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(247,243,236,.9);color:var(--ink);
+  display:grid;place-items:center;font-family:var(--sans);font-size:15px;cursor:pointer;
+  opacity:0;pointer-events:none;transition:.3s;box-shadow:0 10px 24px -14px rgba(0,0,0,.4);
+}
+#toTop.show{opacity:1;pointer-events:auto}
+/* 入场 */
+.reveal{opacity:0;translate:0 18px;transition:opacity .7s ease,translate .7s ease}
+.reveal.in{opacity:1;translate:0 0}
+/* 响应式 */
+@media(max-width:760px){
+  body{font-size:16.5px;line-height:1.9}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .qgrid{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .timeline li{grid-template-columns:64px 1fr;row-gap:6px}
+  .timeline .a{grid-column:1/-1;justify-self:start}
+  .hero{min-height:100vh;min-height:100svh}
+  .hero-inner{padding-bottom:58px}
+  .scroll-hint{display:none}
+  figure{margin:38px 0}
+  .article p{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;translate:0 0;transition:none}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav class="nav" aria-label="章节导航">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#cover">物理的挑战</a>
+    <a class="nav-link" href="#prologue">序</a>
+    <a class="nav-link" href="#c1">20 世纪</a>
+    <a class="nav-link" href="#c2">人才</a>
+    <a class="nav-link" href="#c3">古物理</a>
+    <a class="nav-link" href="#c4">对称</a>
+    <a class="nav-link" href="#c5">未来</a>
+    <a class="nav-link" href="#c6">艺术</a>
+    <a class="nav-link" href="#interpret">解读</a>
+  </div>
+</nav>
+
+<header class="hero" id="cover">
+  <img class="hero-bg" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=traditional%20chinese%20ink%20wash%20painting%2C%20deep%20indigo%20night%20sky%20over%20vast%20mountains%2C%20golden%20particle%20collision%20trails%20and%20stars%2C%20rice%20paper%20texture%2C%20minimalist%2C%20elegant%20negative%20space&image_size=landscape_16_9" alt="水墨星空与粒子轨迹的意象图">
+  <div class="hero-inner">
+    <div class="hero-kicker">A LECTURE BY TSUNG-DAO LEE · 2001</div>
+    <h1>物理的<em>挑战</em></h1>
+    <p class="hero-sub">从一堆石墨开始，走过对称与不对称，走过甲骨文里的新星与玉器里的天文仪器，最后落在一只飞向宇宙的大鹏上。</p>
+    <div class="hero-meta">
+      <span class="chip">李政道</span>
+      <span class="chip">2001 年 10 月 7 日</span>
+      <span class="chip">北京人民大会堂</span>
+      <span class="chip">阅读约 18 分钟</span>
+    </div>
+  </div>
+  <div class="scroll-hint">向下阅读</div>
+</header>
+
+<main>
+<div class="wrap">
+  <div class="intro article">
+    <div class="kicker reveal">导读</div>
+    <h2 class="reveal">规律是“对称”的，<br>而我们的世界，恰恰长在那一点点不对称上。</h2>
+    <p class="lede reveal">这是 1957 年诺贝尔物理学奖得主李政道，在 2001 年北京人民大会堂所做的大型学术报告。他不讲公式，只讲五个故事：费米的反应堆、费米的大计算尺、商朝的甲骨、屈原的《天问》、一根被压弯的杆子。</p>
+    <div class="stats reveal">
+      <div class="stat"><b>25 岁</b><span>爱因斯坦提出狭义相对论</span></div>
+      <div class="stat"><b>0.013°</b><span>璇玑可能达到的定位精度</span></div>
+      <div class="stat"><b>6‰</b><span>K 介子衰变中的 CP 破缺幅度</span></div>
+      <div class="stat"><b>&gt;90%</b><span>宇宙中看不见的暗物质占比</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="chapter" id="prologue">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">序 · PROLOGUE</span>
+      <h2>从一堆石墨开始</h2>
+      <div class="sub">1942 年 12 月 2 日，芝加哥，一座废弃看台之下</div>
+    </div>
+    <p class="reveal">2001 年 10 月 7 日，人民大会堂。李政道开口先道歉：自己上海口音重，到 1972 年才第一次到长江以北，“也许有的话听不清楚，请各位原谅一点”。随后他把一生的动力归结为一句话：<strong>生命的活力，就是来自物理的挑战。</strong></p>
+    <p class="reveal">他先讲了一个不能明说的电话。1942 年 12 月 2 日，费米带领的队伍在芝加哥大学建成人类第一座可控核反应堆。那时意大利与美国已处敌对，费米在美方记录里是“敌侨”，代号被改成 farmer——一个农夫。成功的消息不能直说，于是康普顿打电话给白宫科学顾问康南特：</p>
+    <blockquote class="pull reveal">“意大利航海家刚抵达了新世界。”<br>“本地人的反应如何？”<br>“非常友善。”
+      <cite>—— 1942 年 12 月 2 日，康普顿与康南特的电话</cite>
+    </blockquote>
+    <p class="reveal">意大利航海家是哥伦布，新世界是美洲。罗斯福由此知道：反应堆成了。李政道说，这条消息若被德国知道，第二次世界大战的结局很可能不一样——因为当时全世界最有能力做这件事的人就是费米，而海森堡也在德国做同样的研究。</p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=sepia%20toned%20historical%20illustration%20of%201940s%20physicists%20around%20a%20large%20graphite%20pile%20reactor%20under%20stadium%20stands%2C%20hanging%20cables%2C%20chalkboard%20with%20equations%2C%20dramatic%20warm%20light&image_size=landscape_4_3" alt="1940 年代反应堆与科学家的示意图">
+      <figcaption>示意图：看台下的石墨堆与“农夫”费米的团队。人类第一次不通过太阳取得能量。</figcaption>
+    </figure>
+    <p class="reveal">为什么这件事重要？火的发现与应用开始了人类文化；火的来源是太阳能，而太阳本身，就是一座巨大无比的氢核反应堆。在 1942 年 12 月 2 日之前，人类所有的能量都直接或间接来自太阳；这一天之后，人类第一次绕过了太阳。<strong>“火有火的危险，火的能量也需要人类控制；同样的，核的能量也需要人类控制。”</strong></p>
+  </div></div>
+</section>
+
+<section class="chapter" id="c1">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">壹 · CHAPTER ONE</span>
+      <h2>20 世纪的物理：两个“无用”的谜</h2>
+      <div class="sub">1887 一束光，1900 一块烧红的铁</div>
+    </div>
+    <p class="reveal">19 世纪末 20 世纪初，物理学悬着两个大谜，当时看都和生活毫无关系。</p>
+    <p class="reveal">第一个是 1887 年迈克尔逊与莫雷的实验。地球在转，顺着地球走的光，理应比逆着走的光快一点；可无论朝哪个方向、怎么转，测出来的光速完全一样。第二个是 1900 年普朗克为解释热物体发光的能量分布，硬着头皮做了一个“跳一下”的假设：能量是一份一份的。</p>
+    <p class="reveal">“你怎么想，也不会觉得我们的所有生活因为这两个道理要完全改变。”李政道说。可 1905 年，爱因斯坦由此提出狭义相对论；1925 年，海森堡、薛定谔、狄拉克、费米等人建立量子力学与量子统计——前后不过二十年，<span class="hl">“相当快”</span>。</p>
+    <p class="reveal">再往后，原子结构、分子物理、核能、激光、半导体、超导体、超级计算机……20 世纪几乎全部的科技文明，都从这两条根上长出来。19 世纪的人无法想象我们今天的生活，但若没有这两个基础，就没有 20 世纪的科技成就。</p>
+    <blockquote class="pull reveal">没有水，不会有鱼，当然也不会有鱼市场。<br>没有今日的基础科学，就没有明日的应用科学，也没有将来的开发研究。这个规律是不会变的。
+      <cite>—— 李政道谈基础、应用与开发的关系</cite>
+    </blockquote>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=traditional%20chinese%20ink%20painting%2C%20two%20playful%20fish%20swimming%20in%20clear%20water%2C%20loose%20brushstrokes%2C%20pale%20blue%20and%20ink%20black%2C%20rice%20paper%2C%20minimalist&image_size=landscape_4_3" alt="水墨双鱼示意《鱼之乐》">
+      <figcaption>水墨意象：李政道曾作《鱼之乐》（1994）。水、鱼、鱼市场，是他对基础科学最著名的比喻。</figcaption>
+    </figure>
+  </div></div>
+</section>
+
+<section class="chapter" id="c2">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">贰 · CHAPTER TWO</span>
+      <h2>人才的培养：信息不是理解</h2>
+      <div class="sub">一份年龄名单，和一把全世界唯一的计算尺</div>
+    </div>
+    <p class="reveal">李政道把 20 世纪的科学突破按“当时多少岁”重新排了一遍。排完之后，规律几乎不留例外。</p>
+    <ul class="timeline reveal">
+      <li><span class="y">1905</span><span class="t"><b>爱因斯坦</b>　狭义相对论</span><span class="a">25 岁</span></li>
+      <li><span class="y">1912</span><span class="t"><b>玻尔</b>　由量子假设解释原子结构</span><span class="a">27 岁</span></li>
+      <li><span class="y">1925</span><span class="t"><b>海森堡 / 费米 / 泡利</b>　量子力学诞生</span><span class="a">24 / 25 / 25 岁</span></li>
+      <li><span class="y">1926</span><span class="t"><b>薛定谔</b>　波动力学</span><span class="a">38 岁</span></li>
+      <li><span class="y">1927</span><span class="t"><b>狄拉克</b>　相对论性量子力学方程</span><span class="a">25 岁</span></li>
+      <li><span class="y">1935</span><span class="t"><b>汤川秀树</b>　介子理论</span><span class="a">28 岁</span></li>
+      <li class="key"><span class="y">1942</span><span class="t"><b>费米</b>　人类第一座核反应堆</span><span class="a">41 岁</span></li>
+      <li><span class="y">1945</span><span class="t"><b>朝永振一郎 / 施温格 / 费曼</b>　量子电动力学</span><span class="a">39 / 29 / 29 岁</span></li>
+      <li class="key"><span class="y">1956</span><span class="t"><b>李政道 / 杨振宁</b>　提出宇称不守恒</span><span class="a">29 / 33 岁</span></li>
+      <li class="key"><span class="y">1957</span><span class="t"><b>吴健雄</b>　实验证实宇称不守恒</span><span class="a">44 岁</span></li>
+      <li><span class="y">1964</span><span class="t"><b>盖尔曼</b>　夸克模型</span><span class="a">35 岁</span></li>
+      <li><span class="y">1961 / 67</span><span class="t"><b>格拉肖 / 温伯格</b>　电弱统一理论</span><span class="a">29 / 34 岁</span></li>
+      <li><span class="y">1972</span><span class="t"><b>特霍夫特 / 波利策</b>　量子色动力学</span><span class="a">26 / 24 岁</span></li>
+      <li><span class="y">1955</span><span class="t"><b>克里克 / 沃森</b>　DNA 双螺旋结构</span><span class="a">39 / 25 岁</span></li>
+    </ul>
+    <blockquote class="pull reveal">科学成就出于青年，一代新人才，一片新科技，这个规律是不会有例外的。
+      <cite>—— 李政道</cite>
+    </blockquote>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=vintage%20black%20and%20white%20photograph%2C%20young%20scientists%20in%201920s%20university%20seminar%20room%2C%20blackboard%20full%20of%20physics%20equations%2C%20soft%20grain%2C%20archival%20atmosphere&image_size=landscape_4_3" alt="1920 年代青年科学家讨论的复古影像示意">
+      <figcaption>示意图：1920 年代欧洲研究所里的青年们。玻尔的研究所里，费米、海森堡都曾在那里一对一地被训练出来。</figcaption>
+    </figure>
+    <p class="reveal">但青年只是必要条件。真正的过程，他用自己的经历来讲。</p>
+    <p class="reveal">1946 年，李政道到芝加哥大学做研究生，导师是费米。费米每星期拿出半整天，只跟他一个人讨论，什么问题都谈。有一天费米问：太阳中心的温度是多少？“大概一千万度。” “你怎么知道？” “文献上看来的。” “你自己算过没有？” “没有，计算比较复杂。” 费米说：</p>
+    <blockquote class="pull reveal">这不行。你一定要自己思考、自己估计。你没有通过自己的考虑，就不能接受人家的结论。
+      <cite>—— 费米对李政道说</cite>
+    </blockquote>
+    <p class="reveal">于是两人动手做工具。太阳的亮度与温度之间，是 18 次方与 6.5 次方的关系，普通计算尺拉不动。费米说：我们做一把大的。木尺由费米亲手做，刻度由李政道来标——一面 18 倍对数，一面 6.5 倍对数。有了它，把半径分成十段，一拉两下就出一个结果，一小时就能估到一千万度量级；后来他们用两天、一百个格子，算得更准。这大概是全世界唯一一把专为这道题做的计算尺。而费米当时真正在做的，是电子与中子的散射实验，跟太阳毫无关系。</p>
+    <p class="reveal"><strong>“信息并不是理解。”</strong>高科技工具可以瞬间把信息传给你，理解却有过程；课堂、网络、录像都替代不了一对一的师生共同研究——人跟人，一年两年，以身作则，把榜样传过去。</p>
+  </div></div>
+</section>
+
+<section class="chapter" id="c3">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">叁 · CHAPTER THREE</span>
+      <h2>中国古代的物理：<br>最早的新星，与玉器里的天文仪器</h2>
+      <div class="sub">一句唐诗，一片甲骨，一只璧，一只琮</div>
+    </div>
+    <p class="reveal">杜甫在公元 758 年写下两句诗，李政道说，这是中国最早的“物理学定义”之一：</p>
+    <div class="poem reveal">细推物理须行乐，<br>何用浮名绊此身。<span class="poem-src">杜甫《曲江二首》</span></div>
+    <p class="reveal">“细”，是仔细观察——怎么做实验；“推”，是精密推理——怎么做理论。“须行乐”，是这件事本身要有乐趣；“何用浮名”，是不要为得奖而做。两个字讲实验与理论，一句话讲动机。</p>
+    <figure class="reveal tall">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=macro%20photograph%20of%20ancient%20chinese%20oracle%20bone%20fragment%20with%20carved%20inscriptions%2C%20museum%20lighting%2C%20warm%20ivory%20and%20bronze%20tones%2C%20shallow%20depth%20of%20field&image_size=portrait_4_3" alt="商朝甲骨文实物影像示意">
+      <figcaption>示意图：记录“新大星”的甲骨。原件藏于台北“中央研究院”，约公元前 1300 年，是全世界最早的新星记录。</figcaption>
+    </figure>
+    <p class="reveal">这片甲骨上写着：在并火星座出现一颗新的大星，黄昏时看见，十天后消失。全世界最早、也最完整的新星记录，比任何其他文明都早。</p>
+    <p class="reveal">超新星的记录同样在中国。北宋至和元年，1054 年 8 月 27 日，白昼忽然出现一颗大星，“大如鸡卵”，此后每天记录它的大小，一直记到 1056 年 7 月看不见为止，将近两年，几乎一天不落。今天我们知道，那里是蟹状星云，中心是一颗中子星——一颗转得极准的脉冲星。</p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=crab%20nebula%20deep%20space%20astrophotography%2C%20orange%20and%20blue%20gas%20filaments%2C%20glowing%20neutron%20star%20at%20center%2C%20hubble%20style%2C%20black%20background&image_size=landscape_4_3" alt="蟹状星云示意">
+      <figcaption>示意影像：蟹状星云。1054 年那颗“天关客星”的遗骸，中国人替它记了整整两年的亮度曲线。</figcaption>
+    </figure>
+    <p class="reveal">比记录更了不起的，是追问。公元前 5 世纪，屈原在《天问》里问：“九天之际，安放安属？隅隈多有，谁知其数？”——天若是圆的，地若是平的，两者交界处必然说不通。于是他的结论是：<strong>天如蛋壳，地如蛋黄，两者都在转。</strong>他还接着问：东西南北，哪个更长？南北顺椭，椭多少？这已经在追问地球是正圆还是椭圆。今天我们知道赤道半径 6378 公里，极半径 6356 公里，相差 22 公里。</p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=ancient%20chinese%20green%20jade%20bi%20disc%20and%20square%20cong%20tube%20displayed%20on%20dark%20museum%20cloth%2C%20soft%20spotlight%2C%20subtle%20patina%2C%20elegant%20artifact%20photography&image_size=landscape_4_3" alt="玉璧与玉琮示意">
+      <figcaption>示意图：璧圆而有孔，琮外方而中空。《周礼》说“以苍璧礼天，以黄琮礼地”。</figcaption>
+    </figure>
+    <p class="reveal">李政道提出了一个大胆的解释：璧、琮、璇玑，其实是一套天文仪器的模型。《书·舜典》说“璇，美玉也；玑为转远，径八尺，圆周二丈五尺强，王者正天文之器”——八尺的大玉盘，不是手里的小摆件。他设想：三缺口玉盘扣住三颗恒星，随天而转；一支竹管对准天极，用巨石固定于地；孔径细到两毫米，在八尺之上便可分辨 0.013 度。</p>
+    <p class="reveal">用这套办法回推：公元前 2700 年，天极处恰好有一颗星——紫微右枢，旁边“少宰”“上辅”与北斗的“摇光”正好构成可以扣住的三点。那是四千七百年前。若假设成立，中国老祖宗在天文定位上的精度，已达 0.013 度。后来仪器简化，盘成了璧，轴成了琮，“苍璧礼天，黄琮礼地”便留了下来。</p>
+    <blockquote class="pull reveal">炎黄文化以科学为主、民生为本，没有宗教控制。所以它能一直传到现在，继续发展。
+      <cite>—— 李政道对“为什么炎黄文化能延续”的回答</cite>
+    </blockquote>
+    <p class="reveal">他给出的理由很特别：其他古文明多在沿海，尼罗河每年泛滥，反而给了他们节令；中国在黄土高原，靠精密的天文仪器掌握农时，仪器不复杂，可以广泛传播。所以中国的博物馆里，别处摆的是神像与狮身人面，这里摆的是璧、琮、鼎——<strong>“要么是吃的，要么是喝的”</strong>。他也直言另一面：近四五百年科学主要不在中国发扬，原因之一，很可能是“没有太注意基础科学”。</p>
+  </div></div>
+</section>
+
+<section class="chapter" id="c4">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">肆 · CHAPTER FOUR</span>
+      <h2>对称与不对称</h2>
+      <div class="sub">苏州窗格、一根压弯的杆子、和“我们为什么存在”</div>
+    </div>
+    <p class="reveal">这一章是全场的心脏。李政道先不谈物理，谈画。17 世纪画家弘仁的山水，是用几何方法抽象出来的；把那幅画镜像翻转、拼成完全对称，画面立刻“不像自然界”了。吴冠中的题词说得更妙：</p>
+    <div class="poem reveal">对称乎，未必。<br>且看柳与影，峰两侧。<span class="poem-src">吴冠中</span></div>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=chinese%20shan%20shui%20ink%20landscape%2C%20misty%20mountains%20reflected%20in%20still%20water%2C%20willow%20branch%2C%20symmetrical%20composition%2C%20muted%20ink%20tones%2C%20seventeenth%20century%20style&image_size=landscape_4_3" alt="水墨山水与倒影的对称意象">
+      <figcaption>水墨意象：柳与影，峰两侧。自然里几乎没有绝对对称——微观世界才多一些。</figcaption>
+    </figure>
+    <p class="reveal">例外是晶体。苏州园林的窗格就是很好的样本：转过 180° 复原，是 P2；转 60° 复原、像蜂巢，是 P6；转 90° 复原，是 P4。再加上镜像反射，图案的对称类型便被严格分类。1924 年泡利证明：平面周期图案一共只有 17 种。而 14 世纪西班牙阿尔汉布拉宫的墙上，17 种早已全部出现——定理证明得晚，做窗格的人却早就在用。</p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=islamic%20geometric%20star%20tile%20pattern%20with%20six%20fold%20rotational%20symmetry%2C%20intricate%20tessellation%2C%20deep%20blue%20and%20gold%2C%20alhambra%20palace%20wall&image_size=landscape_4_3" alt="六重对称几何图案示意">
+      <figcaption>示意影像：六重旋转对称的几何镶嵌。苏州窗格与阿尔汉布拉宫，用的是同一套对称语言。</figcaption>
+    </figure>
+    <p class="reveal">还有一种常被忽略的对称：标度对称，今天叫分形。螺壳的半径与转角，在对数坐标上是一条极准的直线；看它一角，就能推出全体。云、海岸线、河流，都遵循类似的规则。</p>
+    <h3 class="reveal" style="font-size:22px;margin:44px 0 6px;">物理里的三个基本对称</h3>
+    <p class="reveal">P：左右，也就是宇称；C：粒子与反粒子；T：时间，过去与将来。李政道说，这三者与宇宙的演化、与我们能否存在，关系极深。</p>
+    <div class="tablewrap reveal">
+      <table>
+        <caption>连续对称性：每一种对称，都对应一个守恒量（诺特定理）</caption>
+        <thead><tr><th>对称性</th><th>对应的守恒量</th></tr></thead>
+        <tbody>
+          <tr><td>空间平移</td><td>动量守恒</td></tr>
+          <tr><td>时间平移</td><td>能量守恒</td></tr>
+          <tr><td>空间转动</td><td>角动量守恒</td></tr>
+          <tr><td>左右镜像</td><td>宇称 P 守恒</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablewrap reveal">
+      <table>
+        <caption>离散对称性：理论都成立，真实世界却逐层破缺</caption>
+        <thead><tr><th>对称</th><th>真实世界</th><th>关键实验 / 年份</th></tr></thead>
+        <tbody>
+          <tr><td>P（左 ↔ 右）</td><td>破缺</td><td>1956 李政道·杨振宁提出；1957 吴健雄实验证实</td></tr>
+          <tr><td>C（粒子 ↔ 反粒子）</td><td>破缺</td><td>1957 加温·莱德曼，π 介子衰变</td></tr>
+          <tr><td>CP（左↔右 + 正↔反）</td><td><strong>破缺约 6‰</strong></td><td>1964 Cronin·Fitch，中性 K 介子</td></tr>
+          <tr><td>CPT（三者同时变）</td><td>仍守恒</td><td>左右 + 正反 + 过去将来，合起来严格对称</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="reveal">1956 年，李政道与杨振宁提出宇称在弱作用中可能不守恒；第二年，吴健雄用实验把它钉死。紧接着，加温与莱德曼发现 C 也不对称。1964 年，Cronin 与 Fitch 用中性的长寿 K 介子做实验：它本身不带电，按道理衰变到正电子与负电子的数目应该一样，实测却<strong>多了约千分之六</strong>。这千分之六，就是 CP 破缺。</p>
+    <blockquote class="pull reveal">假如宇宙完全对称，正物质与反物质会等量湮灭成能量，我们就不可能存在。我们所以存在，就因为它没有反物质在我们旁边。
+      <cite>—— 李政道谈“我们为什么存在”</cite>
+    </blockquote>
+    <p class="reveal">那么，对称的规律怎么会“长出”不对称的世界？他拿起一根杆子：两端加压，超过欧拉阈值，杆就弯。若截面是圆的，它可以朝任意方向弯；若截面是长方形，只有两个方向。于是：</p>
+    <blockquote class="pull reveal">最高的对称性，对应最多的不对称可能性。
+      <cite>—— 自发对称破缺的直观图像</cite>
+    </blockquote>
+    <p class="reveal">圆态可以弯向无穷多个方向，而这些弯法之间不需要能量就能互相转换——在粒子物理里，这就是 <strong>Goldstone–Nambu 玻色子</strong>。而那根杆，就是<strong>真空</strong>：真空没有物质，但引力、强作用、电弱作用的力场都能穿过去，所以它有涨落、能相变，能把夸克禁闭起来，也能把 CP 破缺固定下来。要验证“本来对称”，办法是去“激发”它。</p>
+  </div></div>
+</section>
+
+<section class="chapter" id="c5">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">伍 · CHAPTER FIVE</span>
+      <h2>从过去展望未来：四个大谜</h2>
+      <div class="sub">12 种粒子、3 种作用，和 90% 看不见的宇宙</div>
+    </div>
+    <p class="reveal">20 世纪的方法是“简化归纳”：大的由小的做成，小的由更小的做成，找到最小的，就理解了最大的。1897 年汤姆逊发现电子，卢瑟福发现原子核，再配上相对论与量子力学，一路拆到今天。生物学也照此成功——克里克本是学物理的，和 25 岁的沃森一起找到了 DNA。</p>
+    <p class="reveal">账本看上去很漂亮：我们已知的所有物质，只由 <strong>12 种基本粒子</strong>组成——6 种夸克（上、下、奇、粲、顶、底）与 6 种轻子（电子、μ 子、τ 子及三种中微子）；所有作用归并为三种：强作用、电弱作用、引力。但李政道说，看未来不是看成功，而是问“哪里还不对”。</p>
+    <div class="qgrid reveal">
+      <article class="qcard">
+        <span class="qn">MYSTERY 01</span>
+        <h3>理论对称，实验不对称</h3>
+        <p>三大作用的理论写出来都是对称的，可实验测到的却处处破缺。这不是把理论扔掉就能了事，而是 21 世纪最大的谜之一。</p>
+      </article>
+      <article class="qcard">
+        <span class="qn">MYSTERY 02</span>
+        <h3>夸克为何单独看不见</h3>
+        <p>12 种粒子中，夸克从未被单独观测到。答案可能在于真空：真空把夸克禁闭起来，所以我们要改造真空。</p>
+      </article>
+      <article class="qcard">
+        <span class="qn">MYSTERY 03</span>
+        <h3>90% 以上是暗物质</h3>
+        <p>星系外围的星与尘埃，转速“下不来”。按可见质量算，引力早该变弱。说明还有大量看不见的物质在拉。</p>
+      </article>
+      <article class="qcard">
+        <span class="qn">MYSTERY 04</span>
+        <h3>类星体的能量从哪来</h3>
+        <p>一个类星体的能量可达太阳的 10¹⁵–10¹⁶ 倍，尺度却只有日地距离那么大。已知的核能解释不了。</p>
+      </article>
+    </div>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=spiral%20galaxy%20viewed%20face%20on%2C%20scientific%20visualization%20with%20glowing%20blue%20dark%20matter%20halo%20and%20rotation%20curve%20chart%20overlay%2C%20deep%20space%2C%20elegant%20data%20art&image_size=landscape_4_3" alt="星系旋转曲线与暗物质晕示意">
+      <figcaption>示意影像：星系旋转曲线。可见质量之外，转速迟迟不下降——这是暗物质最直接的证据之一。</figcaption>
+    </figure>
+    <p class="reveal">证据来自几千个星系，没有一个例外。NGC3192 也好，我们的银河系也好，在可见范围之外，转速依旧平直。这意味着宇宙的绝大多数物质，只能感受到引力，既不是我们的电子，也不是核子。李政道说得很直白：<strong>“我们是宇宙的少数。”</strong></p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=gravitationally%20lensed%20quasar%20forming%20four%20bright%20blue%20images%20around%20a%20central%20golden%20galaxy%2C%20einstein%20cross%2C%20deep%20space%20astronomy%20photograph&image_size=landscape_4_3" alt="爱因斯坦十字架引力透镜示意">
+      <figcaption>示意影像：爱因斯坦十字架。80 亿光年外的一个类星体，被中间星系的引力弯折，成像四次。</figcaption>
+    </figure>
+    <p class="reveal">类星体更极端。1961 年最早发现的两个之一，剑桥 273，能量是太阳的 10¹⁶ 倍；1982 年 2 月，它曾在一天之内亮度翻倍。而爱因斯坦十字架告诉我们另一件事：光确实会被引力弯折——一个类星体的四个像，其实来自同一个天体。至于方法，李政道给出方向：21 世纪要从“简化归纳”转向<strong>整体统一</strong>，把微观的基本粒子与宏观的真空放在一起研究，物理与生物平行发展。</p>
+  </div></div>
+</section>
+
+<section class="chapter" id="c6">
+  <div class="wrap"><div class="article">
+    <div class="sec-head reveal">
+      <span class="sec-num">陆 · CHAPTER SIX</span>
+      <h2>科学与艺术：一枚硬币的两面</h2>
+      <div class="sub">“床前明月光”与“其翼若垂天之云”</div>
+    </div>
+    <p class="reveal">最后，他回答那个被问了无数遍的问题：科学和艺术有什么关系？</p>
+    <p class="reveal">艺术，是用新的方法唤起每个人意识与潜意识里的情感。情感越珍贵，唤起越强烈，反响越普遍，艺术就越优秀；它跨社会、跨时代、跨国界。科学，则是对自然现象做<strong>新的、准确的抽象</strong>：抽象越简单，应用越广泛，创造越深刻。</p>
+    <blockquote class="pull reveal">科学跟艺术的共同基础，是人类的创造力；它们追求的目的，是真理的普遍性。它像一枚硬币的两面，是不可分割的。
+      <cite>—— 李政道</cite>
+    </blockquote>
+    <p class="reveal">他念李白的“床前明月光”，说这正是你心里已有的情感被一句诗唤起。而庄子在《逍遥游》里写：“北冥有鱼，其名为鲲……化而为鸟，其名为鹏。鹏之大，不知其几千里也；其翼若垂天之云，背负青天，莫之夭阏。”在李政道看来，鹏就是整个宇宙，鹏的飞，就是宇宙开始的大爆炸。</p>
+    <figure class="wide reveal">
+      <img loading="lazy" src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=giant%20mythical%20bird%20flying%20over%20a%20starburst%20cosmos%2C%20chinese%20ink%20painting%2C%20gold%20and%20black%20splashes%2C%20epic%20scale%2C%20rice%20paper%20texture&image_size=landscape_4_3" alt="大鹏飞越宇宙的水墨意象">
+      <figcaption>水墨意象：刘巨德曾作《大鹏》（1998）。鹏的飞，既是宇宙大爆炸，也是炎黄文化的过去与将来。</figcaption>
+    </figure>
+    <p class="reveal">讲到这里，他说了最后一句：炎黄文化有悠久的历史，就像宇宙开始的大爆炸一样，会永远扩大、发展，勇往直前。</p>
+  </div></div>
+</section>
+
+<section class="interpret" id="interpret">
+  <div class="inner">
+    <span class="tag">解读 · READING</span>
+    <h2>把这场演讲折成五句话</h2>
+    <p>演讲的主线只有一个词：<strong>对称</strong>。把它摊开，是五层递进。</p>
+
+    <h3>一、20 世纪的物理，是“简化归纳”的胜利</h3>
+    <p>两个当年看似与生活无关的实验——迈克尔逊—莫雷（1887）与黑体辐射（1900）——催生了狭义相对论与量子力学，再长出核能、激光、半导体、超导体与超级计算机。基础、应用、开发的关系，就是水、鱼与鱼市场。</p>
+
+    <h3>二、贯穿全场的那条规律，叫“对称”</h3>
+    <p>每一种对称性都对应一个守恒量。连续对称对应严格守恒；离散对称在理论里成立，在真实世界里却逐层破缺：P 破缺、C 破缺、CP 破缺约千分之六，而 CPT 合起来仍严格守恒。</p>
+
+    <h3>三、规律对称，世界不对称——正是这一点让我们存在</h3>
+    <p>若宇宙完全对称，正反物质会等量湮灭成能量，就没有物质、没有我们。真实世界之所以在，恰是因为规律里留下了那一点点不对称。</p>
+
+    <h3>四、机制是“自发对称破缺”</h3>
+    <p>圆截面杆可以朝任意方向弯：最高的对称性，对应最多的不对称可能。各弯法之间无需能量即可转换，这就是 Goldstone–Nambu 玻色子；而那根杆，就是能相变、能禁闭夸克、能固定 CP 破缺的真空。</p>
+
+    <h3>五、21 世纪：从“越小越好”转向“整体统一”</h3>
+    <p>理论对称而实验不对称、夸克单独看不见、90% 以上是暗物质、类星体能量高达太阳的 10¹⁵–10¹⁶ 倍——四个大谜，要求把微观粒子与宏观真空放在同一个框架里研究。</p>
+
+    <h3>人类是怎么找到这些规律的？</h3>
+    <p>从杜甫的“细推物理”出发，可以折成一条循环：</p>
+    <div class="steps">
+      <div class="step"><b>细</b><span>仔细观察<br>设计实验</span></div>
+      <div class="step"><b>疑</b><span>常识未必真<br>反常即线索</span></div>
+      <div class="step"><b>推</b><span>用对称性推演<br>反推背后规律</span></div>
+      <div class="step"><b>验</b><span>实验裁判<br>定真伪</span></div>
+      <div class="step"><b>问</b><span>理解之后<br>提出新问题</span></div>
+    </div>
+    <p>还有两件常被忽略的事。其一，<strong>信息 ≠ 理解</strong>：费米逼他自己估算太阳中心温度，然后一起做了一把大计算尺。其二，<strong>科学是对自然做新的、准确的抽象</strong>，抽象越简单、应用越广，与艺术同源于创造力。</p>
+    <p>最后是他反复用的比喻：科学像一波一波的浪，一个浪到最高处就要落下。<strong>不要追已经到顶的浪，而要抓正在涌起的下一浪。</strong></p>
+
+    <div class="takeaway">
+      <small>ONE SENTENCE</small>
+      规律是“对称”的，真实世界却因对称破缺而“不对称”，我们正是这个不对称的产物；而人类找到规律的办法，是“细”（观察）与“推”（推理）交替，外加“疑”的勇气和“验”的裁判。
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <h3>资料来源</h3>
+    <ol>
+      <li>李政道《物理的挑战》全文（公众号“物理的挑战【视频 115 分钟 + 口语文本】”）：<a href="https://mp.weixin.qq.com/s?__biz=MzI3OTE3NjUyMw==&mid=2247524631&amp;idx=1&amp;sn=02daa4e46dc978b0a3e43e79a73eccb7" target="_blank" rel="noopener">原文链接</a></li>
+      <li>袁岚峰《物理学与美学的顶峰相遇——李政道先生思想的星辰之光》：<a href="https://user.guancha.cn/main/content?id=523903" target="_blank" rel="noopener">观察者网</a></li>
+      <li>《李政道清华开讲 21 世纪最大谜题》，清华大学：<a href="https://www.tsinghua.edu.cn/info/1963/76582.htm" target="_blank" rel="noopener">清华新闻网</a></li>
+      <li>《诺奖官网专访晚年李政道：物理学并未过时》：<a href="https://news.qq.com/rain/a/20240807A0211C00" target="_blank" rel="noopener">腾讯新闻</a></li>
+      <li>吴岳良《科学巨擘天语解道：宇称破坏与对称原理》：<a href="https://tdli.sjtu.edu.cn/storage/tdli/web/cn/file/2024/08/a075beb86743ee91835aaf29bcd3c76b.pdf" target="_blank" rel="noopener">PDF</a></li>
+      <li>叶铭汉《细推物理须行乐——祝贺李政道 95 华诞》：<a href="https://www.ihep.cas.cn/zt/dnlzd/jnwz/202408/P020240805538882631642.pdf" target="_blank" rel="noopener">PDF</a></li>
+    </ol>
+    <div class="note">
+      编者说明：本页依据现场口语版全文改写，为便于阅读作了节选与语序调整，保留原讲述的比喻与判断。文中配图均为版式需要的 AI 生成示意图，并非历史照片或原始文献影像；相关史实请以正式出版文本与原始资料为准。谨以此页纪念李政道先生。
+    </div>
+  </div>
+</footer>
+</main>
+
+<button id="toTop" aria-label="回到顶部">↑</button>
+
+<script>
+(function(){
+  var progress = document.getElementById('progress');
+  var topBtn = document.getElementById('toTop');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+    progress.style.width = (p * 100).toFixed(2) + '%';
+    if (p > 0.08) { topBtn.classList.add('show'); } else { topBtn.classList.remove('show'); }
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  topBtn.addEventListener('click', function(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    var navIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) {
+          var id = '#' + e.target.id;
+          links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === id); });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function(s){ navIo.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
