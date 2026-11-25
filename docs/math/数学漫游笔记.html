@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学漫游笔记：从黎曼猜想到复分析</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --paper:#ffffff; --text:#1c1f23; --muted:#6b7280;
+    --border:#e4e7ec; --accent:#2563eb; --accent2:#7c3aed; --gold:#b45309;
+    --ok:#047857; --warn:#b91c1c; --code-bg:#eef1f5;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.75; font-size:16px;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 20px 80px;}
+
+  /* cover */
+  .cover{position:relative; max-width:880px; margin:24px auto 0; border-radius:16px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,.12);}
+  .cover img{display:block; width:100%; height:320px; object-fit:cover;}
+  .cover .cap{
+    position:absolute; left:0; right:0; bottom:0; padding:26px 26px 20px;
+    background:linear-gradient(to top, rgba(10,14,25,.86), rgba(10,14,25,0));
+    color:#fff;
+  }
+  .cover .cap h1{margin:0; font-size:26px; letter-spacing:.5px;}
+  .cover .cap p{margin:6px 0 0; font-size:13.5px; opacity:.9;}
+
+  h2{
+    font-size:21px; margin:44px 0 12px; padding-bottom:8px;
+    border-bottom:2px solid var(--border); scroll-margin-top:16px;
+  }
+  h2 .n{color:var(--accent); font-weight:800; margin-right:8px;}
+  h3{font-size:16.5px; margin:22px 0 8px; color:var(--accent2);}
+  p{margin:10px 0;}
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:14px;
+    background:var(--code-bg); padding:1px 6px; border-radius:5px;
+  }
+  pre{
+    background:#0f172a; color:#e2e8f0; padding:14px 16px; border-radius:10px;
+    overflow-x:auto; font-size:13.5px; line-height:1.6;
+  }
+  pre code{background:none; color:inherit; padding:0;}
+  .formula{
+    display:block; text-align:center; margin:14px 0; padding:12px 14px;
+    background:#f8fafc; border:1px solid var(--border); border-radius:10px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:15px; color:#0f172a;
+    overflow-x:auto;
+  }
+  .muted{color:var(--muted);}
+  .lead{font-size:15px; color:var(--muted);}
+
+  /* toc */
+  .toc{
+    background:var(--paper); border:1px solid var(--border); border-radius:12px;
+    padding:16px 20px; margin:22px 0; box-shadow:0 2px 10px rgba(0,0,0,.04);
+  }
+  .toc h2{margin:0 0 10px; border:none; padding:0; font-size:15px;}
+  .toc ol{margin:0; padding-left:22px; columns:2; column-gap:26px;}
+  .toc li{margin:5px 0; font-size:14px; break-inside:avoid;}
+  @media(max-width:640px){ .toc ol{columns:1;} }
+
+  /* cards + callouts */
+  .card{background:var(--paper); border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin:16px 0; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  .callout{border-left:4px solid var(--accent); background:#eff6ff; border-radius:8px; padding:12px 16px; margin:16px 0;}
+  .callout.gold{border-left-color:var(--gold); background:#fff7ed;}
+  .callout.green{border-left-color:var(--ok); background:#ecfdf5;}
+  .callout.red{border-left-color:var(--warn); background:#fef2f2;}
+  .callout b{color:inherit;}
+
+  /* grid of cards */
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0;}
+  @media(max-width:640px){ .grid2{grid-template-columns:1fr;} }
+
+  /* tables */
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;}
+  th,td{border:1px solid var(--border); padding:9px 11px; text-align:left; vertical-align:top;}
+  thead th{background:#f1f4f8; font-weight:700;}
+  tbody th{background:#f8fafc;}
+  td.yes{background:#ecfdf5; color:var(--ok); font-weight:600;}
+  td.no{background:#fef2f2; color:var(--warn);}
+  .wrap-scroll{overflow-x:auto;}
+
+  /* figures */
+  figure{margin:20px 0; background:var(--paper); border:1px solid var(--border); border-radius:12px; padding:14px; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  figure img{display:block; width:100%; border-radius:8px;}
+  figcaption{font-size:13px; color:var(--muted); margin-top:10px; text-align:center;}
+  figure svg{display:block; width:100%; height:auto;}
+
+  /* svg styling */
+  .s-axis{stroke:#cbd2da; stroke-width:1.4;}
+  .s-ucircle{fill:none; stroke:#cbd2da; stroke-width:1; stroke-dasharray:4 5;}
+  .s-arc{fill:none; stroke:#2563eb; stroke-width:2; opacity:.75;}
+  .s-ah{fill:#2563eb;}
+  .s-dot{fill:#2563eb;}
+  .s-origin{fill:#9aa2ad;}
+  .s-lbl{fill:#1c1f23; font-size:15px; font-weight:600;}
+  .s-mul{fill:#2563eb; font-size:12px; font-weight:700;}
+  .s-axlbl{fill:#6b7280; font-size:12px;}
+  .s-v1{stroke:#2563eb; stroke-width:2; fill:none;}
+  .s-v2{stroke:#7c3aed; stroke-width:2; fill:none;}
+  .s-vsum{stroke:#dc2626; stroke-width:2.4; fill:none;}
+  .s-a1{fill:#2563eb;} .s-a2{fill:#7c3aed;} .s-as{fill:#dc2626;}
+  .s-l1{fill:#2563eb;} .s-l2{fill:#7c3aed;} .s-ls{fill:#dc2626;}
+  .s-dash{stroke:#9aa2ad; stroke-width:1.2; stroke-dasharray:3 4; fill:none;}
+  .s-band{fill:#dbeafe; opacity:.55;}
+  .s-cline{stroke:#dc2626; stroke-width:1.6; stroke-dasharray:5 4;}
+  .s-zero{fill:#2563eb;}
+  .s-triv{fill:#b45309;}
+  .s-txt{fill:#1c1f23; font-size:12px;}
+  .s-txt-sm{fill:#6b7280; font-size:11px;}
+  .s-box{fill:#f8fafc; stroke:#cbd2da; stroke-width:1.2; rx:8;}
+  .s-flow{stroke:#2563eb; stroke-width:1.8; fill:none;}
+
+  footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--border); font-size:13px; color:var(--muted); text-align:center;}
+  hr.sep{border:none; border-top:1px dashed var(--border); margin:34px 0;}
+  @media print{
+    body{background:#fff;} .cover{box-shadow:none;} a{color:#000;}
+    h2{page-break-after:avoid;} figure,table{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <img src="./assets/cover.jpg" alt="从黎曼猜想到复分析">
+  <div class="cap">
+    <h1>数学漫游笔记：从黎曼猜想到复分析</h1>
+    <p>由一次连续提问式对谈整理 · 15 个知识模块 · 含图解的复变与物理之旅</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#s1">缘起：AI 证明黎曼猜想与 AGI</a></li>
+      <li><a href="#s2">形式化数学：Lean</a></li>
+      <li><a href="#s3">黎曼猜想</a></li>
+      <li><a href="#s4">从实变到复变</a></li>
+      <li><a href="#s5">复数的几何</a></li>
+      <li><a href="#s6">复变函数的性质与应用</a></li>
+      <li><a href="#s7">解析延拓</a></li>
+      <li><a href="#s8">复变函数与物理世界</a></li>
+      <li><a href="#s9">量子力学 vs 广义相对论</a></li>
+      <li><a href="#s10">微分几何入门</a></li>
+      <li><a href="#s11">级数与函数表示</a></li>
+      <li><a href="#s12">实函数为何"复化"</a></li>
+      <li><a href="#s13">数论与素数</a></li>
+      <li><a href="#s14">核心洞察汇总</a></li>
+      <li><a href="#s15">术语速查表</a></li>
+    </ol>
+  </div>
+
+  <p class="lead">本文把一次完整对谈整理成结构化知识：从 AI 证明黎曼猜想的事件出发，经由 Lean 与黎曼猜想，进入实变与复变的对比、复数的几何、复变函数的性质与应用、解析延拓，再到复变与量子力学/广义相对论的关系、微分几何、级数表示，最后落到"实函数为何复化"与数论中的素数。</p>
+
+  <!-- 1 -->
+  <h2 id="s1"><span class="n">1</span>缘起：AI 证明黎曼猜想与 AGI</h2>
+  <div class="card">
+    <h3>事件梗概（2026-11 场景）</h3>
+    <ul>
+      <li>数学家 Levent Alpöge 公布约 <b>1700 万行 Lean 代码</b>，声称与 Claude 合作证明了黎曼猜想。</li>
+      <li><b>LeanFRO</b> 与 <b>Mathlib Initiative</b> 联合声明，对该证明给出<b>正式认证</b>。</li>
+      <li>对照案例：Masullo 的 <b>940 页人类证明</b>被 AI 查出问题。</li>
+    </ul>
+    <h3>认证的四项判据</h3>
+    <ol>
+      <li>待证命题被正确定义；</li>
+      <li>代码可被 Lean 检查器<b>机械地</b>逐行验证通过；</li>
+      <li>依赖的库（Mathlib）定义与引理共享、无隐藏假设；</li>
+      <li>结论与命题一致（无"偷换命题"）。</li>
+    </ol>
+  </div>
+  <div class="callout red">
+    <b>必须澄清的边界：</b>认证的是"命题正确 + 机械检查通过"，<b>而非人类理解</b>；检查器与证明者<b>共享同一套 Mathlib 定义</b>，因此没有覆盖"定义本身是否恰当"。
+  </div>
+  <div class="callout">
+    <b>对 AGI 的启示：</b>形式化系统把"证明"变成可被机器验证的对象，为 AI 提供可判定、可审计的目标；但"会验证"≠"会理解"。
+  </div>
+
+  <!-- 2 -->
+  <h2 id="s2"><span class="n">2</span>形式化数学：Lean</h2>
+  <p><b>Lean</b> 是一个交互式定理证明器，基于<b>依赖类型论</b>：命题写成"类型"，证明就是构造该类型的"项"。</p>
+  <pre><code>import Mathlib
+example (u v : ℝ × ℝ) (h : u.1 * v.1 + u.2 * v.2 = 0) :
+    (u.1 + v.1) ^ 2 + (u.2 + v.2) ^ 2
+      = (u.1 ^ 2 + u.2 ^ 2) + (v.1 ^ 2 + v.2 ^ 2) := by
+  nlinarith [h]
+
+example (a b : ℝ) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2 := by ring</code></pre>
+  <p>上面第一个例子把勾股定理翻译成代数恒等式，再交给代数引擎 <code>nlinarith</code> 完成——这正是<b>几何代数化</b>在形式化时代的延续。</p>
+
+  <!-- 3 -->
+  <h2 id="s3"><span class="n">3</span>黎曼猜想</h2>
+  <div class="formula">ζ(s) = Σ<sub>n=1..∞</sub> 1 / n<sup>s</sup>&nbsp;&nbsp;(Re(s) &gt; 1)</div>
+  <div class="formula">ζ(s) = Π<sub>p 素数</sub> 1 / (1 − p<sup>−s</sup>)</div>
+  <p>欧拉乘积把"素数"与"求和"直接连在一起，是素数信息进入解析方法的入口。</p>
+
+  <figure>
+    <svg viewBox="0 0 520 300" role="img" aria-label="zeta 函数的定义域、临界带与临界线">
+      <defs>
+        <marker id="zah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path class="s-ah" d="M0,0 L10,5 L0,10 Z"/>
+        </marker>
+      </defs>
+      <rect class="s-band" x="200" y="30" width="40" height="240" rx="4"/>
+      <line class="s-axis" x1="40" y1="150" x2="500" y2="150" marker-end="url(#zah)"/>
+      <line class="s-axis" x1="200" y1="270" x2="200" y2="26" marker-end="url(#zah)"/>
+      <text class="s-txt" x="470" y="170">Re(s)</text>
+      <text class="s-txt" x="206" y="40">Im(s)</text>
+      <line class="s-cline" x1="220" y1="34" x2="220" y2="266"/>
+      <!-- trivial zeros -->
+      <circle class="s-triv" cx="40" cy="150" r="4"/>
+      <circle class="s-triv" cx="120" cy="150" r="4"/>
+      <text class="s-txt-sm" x="26" y="138">−4</text>
+      <text class="s-txt-sm" x="106" y="138">−2</text>
+      <!-- pole at s=1 -->
+      <circle cx="240" cy="150" r="5" fill="none" stroke="#b91c1c" stroke-width="2"/>
+      <text class="s-txt-sm" x="246" y="168" fill="#b91c1c">极点 s=1</text>
+      <!-- nontrivial zeros on critical line -->
+      <circle class="s-zero" cx="220" cy="110" r="3.5"/>
+      <circle class="s-zero" cx="220" cy="80"  r="3.5"/>
+      <circle class="s-zero" cx="220" cy="190" r="3.5"/>
+      <circle class="s-zero" cx="220" cy="220" r="3.5"/>
+      <text class="s-txt-sm" x="150" y="58">临界带 0&lt;Re(s)&lt;1</text>
+      <text class="s-txt-sm" x="228" y="252" fill="#b91c1c">临界线 Re(s)=½</text>
+      <text class="s-txt-sm" x="30" y="120" fill="#b45309">平凡零点</text>
+      <text class="s-txt-sm" x="300" y="144" fill="#2563eb">非平凡零点（均在临界线上）</text>
+    </svg>
+    <figcaption>复 s 平面：级数只在 Re(s)&gt;1 收敛；非平凡零点全落在临界带内，黎曼猜想断言它们都在 Re(s)=½ 上。</figcaption>
+  </figure>
+
+  <p><b>解析延拓与函数方程：</b>ζ 可被<b>唯一地</b>延拓到整个复平面（除 s=1 一个极点）：</p>
+  <div class="formula">ζ(s) = 2<sup>s</sup> π<sup>s−1</sup> sin(πs/2) Γ(1−s) ζ(1−s)</div>
+  <div class="grid2">
+    <div class="card">
+      <h3>平凡零点</h3>
+      <p>由 sin(πs/2)=0 强制，位于 s = −2, −4, −6, …（负偶数）。</p>
+    </div>
+    <div class="card">
+      <h3>非平凡零点</h3>
+      <p>全部落在<b>临界带</b> 0 &lt; Re(s) &lt; 1 内。</p>
+    </div>
+  </div>
+  <div class="callout gold">
+    <b>黎曼猜想：</b>所有非平凡零点的实部都等于 ½，即全部落在<b>临界线</b> Re(s)=½ 上。它精确刻画了素数分布的误差项。
+  </div>
+
+  <!-- 4 -->
+  <h2 id="s4"><span class="n">4</span>从实变到复变：多一个维度带来什么</h2>
+  <p>在实数域，"可导"只是好函数的一个子类（光滑 ≠ 解析）；在复数域，三件事<b>塌缩成同一件事</b>：</p>
+  <div class="formula">复可导 &nbsp;⟺&nbsp; 解析 &nbsp;⟺&nbsp; 可展成收敛幂级数</div>
+  <p>原因是复极限要求 h <b>沿所有复方向</b>趋于 0 时一致，这给出<b>柯西–黎曼方程</b>：</p>
+  <div class="formula">∂u/∂x = ∂v/∂y,&nbsp;&nbsp; ∂u/∂y = −∂v/∂x</div>
+  <p>并直接推出<b>唯一性定理</b>：解析函数在任意小邻域上的取值，唯一决定它在整个连通区域上的取值——<b>局部决定整体</b>。复数世界的规则不是更松，而是<b>更硬</b>。</p>
+
+  <!-- 5 -->
+  <h2 id="s5"><span class="n">5</span>复数的几何</h2>
+
+  <figure>
+    <img src="./assets/complex_rotation.jpg" alt="复平面上的旋转">
+    <figcaption>在复平面上，乘以 i 就是一次逆时针 90° 旋转。</figcaption>
+  </figure>
+
+  <h3>一、乘以 i ＝ 逆时针旋转 90°</h3>
+  <p>i·1 = i，把 (1,0) 送到 (0,1)。于是 i² ＝ 旋转两次 90° ＝ 旋转 180° ＝ 乘以 −1。所以 <code>i² = −1</code> 不是硬规定，而是"直角转两下＝掉头"的代数写法。i³=−i，i⁴=1，周期为 4。</p>
+
+  <figure>
+    <svg viewBox="0 0 470 400" role="img" aria-label="乘以 i 的四步旋转循环">
+      <defs>
+        <marker id="rah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto">
+          <path class="s-ah" d="M0,0 L10,5 L0,10 Z"/>
+        </marker>
+      </defs>
+      <line class="s-axis" x1="60" y1="200" x2="420" y2="200"/>
+      <line class="s-axis" x1="235" y1="340" x2="235" y2="60"/>
+      <text class="s-axlbl" x="428" y="205" text-anchor="end">Re</text>
+      <text class="s-axlbl" x="243" y="58">Im</text>
+      <circle class="s-ucircle" cx="235" cy="200" r="120"/>
+      <path class="s-arc" d="M355,200 A120,120 0 0 0 235,80" marker-end="url(#rah)"/>
+      <path class="s-arc" d="M235,80  A120,120 0 0 0 115,200" marker-end="url(#rah)"/>
+      <path class="s-arc" d="M115,200 A120,120 0 0 0 235,320" marker-end="url(#rah)"/>
+      <path class="s-arc" d="M235,320 A120,120 0 0 0 355,200" marker-end="url(#rah)"/>
+      <text class="s-mul" x="303" y="132" text-anchor="middle">×i</text>
+      <text class="s-mul" x="167" y="132" text-anchor="middle">×i</text>
+      <text class="s-mul" x="167" y="276" text-anchor="middle">×i</text>
+      <text class="s-mul" x="303" y="276" text-anchor="middle">×i</text>
+      <circle class="s-dot" cx="355" cy="200" r="5"/>
+      <circle class="s-dot" cx="235" cy="80"  r="5"/>
+      <circle class="s-dot" cx="115" cy="200" r="5"/>
+      <circle class="s-dot" cx="235" cy="320" r="5"/>
+      <circle class="s-origin" cx="235" cy="200" r="2.5"/>
+      <text class="s-lbl" x="367" y="196">1</text>
+      <text class="s-lbl" x="235" y="70" text-anchor="middle">i</text>
+      <text class="s-lbl" x="103" y="196" text-anchor="end">−1</text>
+      <text class="s-lbl" x="235" y="346" text-anchor="middle">−i</text>
+    </svg>
+    <figcaption>1 → i → −1 → −i → 1：每步乘以 i，逆时针转 90°；转两次即乘 −1。</figcaption>
+  </figure>
+
+  <h3>二、加法是平移，乘法是相似</h3>
+  <figure>
+    <svg viewBox="0 0 250 205" role="img" aria-label="复数加法的平行四边形">
+      <defs>
+        <marker id="aah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto"><path class="s-a1" d="M0,0 L10,5 L0,10 Z"/></marker>
+        <marker id="aah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto"><path class="s-a2" d="M0,0 L10,5 L0,10 Z"/></marker>
+        <marker id="aahs" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" markerUnits="strokeWidth" orient="auto"><path class="s-as" d="M0,0 L10,5 L0,10 Z"/></marker>
+      </defs>
+      <line class="s-axis" x1="28" y1="175" x2="222" y2="175"/>
+      <line class="s-axis" x1="40" y1="192" x2="40" y2="24"/>
+      <path class="s-dash" d="M124,147 L152,63"/>
+      <path class="s-dash" d="M68,91 L152,63"/>
+      <line class="s-v1" x1="40" y1="175" x2="124" y2="147" marker-end="url(#aah1)"/>
+      <line class="s-v2" x1="40" y1="175" x2="68" y2="91" marker-end="url(#aah2)"/>
+      <line class="s-vsum" x1="40" y1="175" x2="152" y2="63" marker-end="url(#aahs)"/>
+      <text class="s-lbl s-l1" x="128" y="152">z₁</text>
+      <text class="s-lbl s-l2" x="52" y="88">z₂</text>
+      <text class="s-lbl s-ls" x="156" y="58">z₁+z₂</text>
+      <text class="s-txt-sm" x="42" y="196">加法＝矢量叠加（平行四边形）</text>
+    </svg>
+    <figcaption>加法：分量各自相加，本质是平移，不挑原点。</figcaption>
+  </figure>
+  <p>乘法则是<b>旋转 + 拉伸</b>（相似变换），不动原点。一句话定义：</p>
+  <div class="callout">
+    <b>ℂ ＝ 给 ℝ² 再装上一个乘法</b>（等价于选定一个"逆时针 90°"的旋转算子 i）。向量只有加法，没有天然的乘法；复数就是"补上乘法"的那个平面。
+  </div>
+
+  <h3>三、极坐标 / 指数式</h3>
+  <div class="formula">z = a + bi = r e<sup>iφ</sup>,&nbsp;&nbsp; r=|z|, φ=arg z,&nbsp;&nbsp; e<sup>iφ</sup> = cos φ + i sin φ</div>
+  <div class="formula">(r₁,φ₁)·(r₂,φ₂) = (r₁r₂, φ₁+φ₂)</div>
+  <p>即<b>模长相乘、辐角相加</b>——指数律 e<sup>iα</sup>e<sup>iβ</sup> = e<sup>i(α+β)</sup> 的几何含义。</p>
+
+  <h3>四、两套坐标：没有免费午餐</h3>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th>运算</th><th>直角式 a+bi</th><th>指数式 r e<sup>iφ</sup></th></tr></thead>
+    <tbody>
+      <tr><th>加法 z₁+z₂</th><td class="yes">✅ 分量直接相加</td><td class="no">❌ 需和差化积</td></tr>
+      <tr><th>乘法 z₁·z₂</th><td class="no">❌ 要展开四项</td><td class="yes">✅ (r₁r₂)e<sup>i(φ₁+φ₂)</sup></td></tr>
+      <tr><th>乘方 zⁿ</th><td class="no">❌ 二项式展开</td><td class="yes">✅ rⁿ e<sup>inφ</sup>（棣莫弗）</td></tr>
+      <tr><th>n 次方根</th><td class="no">❌ 难写</td><td class="yes">✅ 均匀落在圆上</td></tr>
+      <tr><th>旋转</th><td class="no">❌ 乘旋转矩阵</td><td class="yes">✅ 辐角直接加</td></tr>
+      <tr><th>唯一性</th><td class="yes">✅ 一一对应</td><td class="no">❌ φ 模 2π；z=0 无定义</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="muted">直角式为<b>加法</b>而生，指数式为<b>乘法</b>而生。指数式强，是因为它把乘法变成了辐角相加——和 ln 把"乘"变"加"是同一机制；代价是丢了唯一性（多值、原点特殊）。</p>
+
+  <h3>五、共轭与保角</h3>
+  <p>共轭 <code>z̄ = a − bi = r e^(−iφ)</code>：沿实轴镜像。因为乘法只做旋转 + 等比伸缩，解析函数的导数（非零处）局部也是"旋转 + 伸缩"，即<b>保角映射</b>。</p>
+
+  <!-- 6 -->
+  <h2 id="s6"><span class="n">6</span>复变函数的性质与应用</h2>
+  <p><b>洛朗级数</b>：在奇点附近，解析函数可展成含负幂的级数 f(z)=Σ aₙ(z−z₀)ⁿ。据此把<b>孤立奇点</b>分三类：</p>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th>类型</th><th>洛朗展开特征</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td>可去奇点</td><td>无负幂项</td><td>sin z / z 在 z=0</td></tr>
+      <tr><td>极点（m 阶）</td><td>有限个负幂项</td><td>1/z² 在 z=0</td></tr>
+      <tr><td>本性奇点</td><td>无穷多个负幂项</td><td>e<sup>1/z</sup> 在 z=0</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>零点与极点互为倒数镜像</b>：f 的零点 ↔ 1/f 的极点。</p>
+  <div class="grid2">
+    <div class="card"><h3>留数定理</h3><p>把实轴上的困难积分化为复平面内的留数求和。</p></div>
+    <div class="card"><h3>共形映射</h3><p>把复杂区域映成标准区域（如上半平面 ↔ 单位圆），求解流体、电场边值问题。</p></div>
+    <div class="card"><h3>色散关系</h3><p>由因果性 + 解析性，把折射率的实部与虚部联系起来。</p></div>
+    <div class="card"><h3>保角性</h3><p>导数非零处局部保角，是复分析几何图像的核心。</p></div>
+  </div>
+
+  <!-- 7 -->
+  <h2 id="s7"><span class="n">7</span>解析延拓</h2>
+  <p>ζ 的级数只在 Re(s)&gt;1 收敛，可非平凡零点全在<b>不收敛</b>的临界带里——不延拓就无从谈起。</p>
+  <figure>
+    <svg viewBox="0 0 520 170" role="img" aria-label="解析延拓的动机链">
+      <defs>
+        <marker id="cah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="s-ah" d="M0,0 L10,5 L0,10 Z"/></marker>
+      </defs>
+      <g font-size="12.5" fill="#1c1f23">
+        <rect class="s-box" x="6"   y="60" width="110" height="50"/>
+        <text x="61" y="82" text-anchor="middle">研究素数</text>
+        <text x="61" y="99" text-anchor="middle" font-size="11" fill="#6b7280">↕ 欧拉乘积</text>
+
+        <rect class="s-box" x="140" y="60" width="110" height="50"/>
+        <text x="195" y="82" text-anchor="middle">信息在 ζ 零点</text>
+        <text x="195" y="99" text-anchor="middle" font-size="11" fill="#6b7280">分布 = 素数误差</text>
+
+        <rect class="s-box" x="274" y="60" width="110" height="50"/>
+        <text x="329" y="82" text-anchor="middle">零点在临界带</text>
+        <text x="329" y="99" text-anchor="middle" font-size="11" fill="#6b7280">级数不收敛</text>
+
+        <rect class="s-box" x="408" y="60" width="106" height="50"/>
+        <text x="461" y="82" text-anchor="middle">只能解析延拓</text>
+        <text x="461" y="99" text-anchor="middle" font-size="11" fill="#6b7280">且唯一</text>
+      </g>
+      <path class="s-flow" d="M116,85 L138,85" marker-end="url(#cah)"/>
+      <path class="s-flow" d="M250,85 L272,85" marker-end="url(#cah)"/>
+      <path class="s-flow" d="M384,85 L406,85" marker-end="url(#cah)"/>
+      <text class="s-txt-sm" x="260" y="150" text-anchor="middle">不延拓，素数分布的信息根本不在你手里</text>
+    </svg>
+    <figcaption>"必须解析延拓"的逻辑链。</figcaption>
+  </figure>
+  <div class="formula">1/(1−z) = 1 + z + z² + ⋯&nbsp;(|z|&lt;1)&nbsp;&nbsp;→(唯一延拓)→&nbsp;&nbsp;1/(1−z)&nbsp;(z≠1)</div>
+  <p><b>唯一性</b>：两解析函数若在有聚点的集合上相等，则在整连通区域上相等——延拓若存在，<b>只有一种</b>。</p>
+  <div class="callout green">
+    <b>用途：</b>定义特殊函数（Γ、ζ）在全平面的值；给发散级数"定值"（1+2+3+⋯ = ζ(−1) = −1/12）；物理中的 QFT 正则化/重整化、Wick 转动、S 矩阵的解析性与极点（极点 ＝ 束缚态/共振）。
+  </div>
+  <div class="callout">
+    <b>代价与结构：</b>可能遇到<b>自然边界</b>；多值函数（如 log z）需要<b>分支割线</b>与 <b>Riemann 曲面</b>——正是指数式丢掉的唯一性在复分析里的具体偿还。
+  </div>
+
+  <!-- 8 -->
+  <h2 id="s8"><span class="n">8</span>复变函数与物理世界</h2>
+  <h3>复数在量子力学里是"本体"吗？</h3>
+  <ul>
+    <li>波函数<b>不是物质</b>，它是对微观状态的一种描述；</li>
+    <li>微观世界的运行规则<b>恰好在数学结构上最自然地用复数描述</b>；</li>
+    <li>精确表述：<b>整体相位不可观测</b>（描述冗余），<b>相对相位可观测</b>（物理）。</li>
+  </ul>
+  <div class="callout">"复数不是物质，但也不是随便的描述——它是<b>相位的代数</b>。"</div>
+
+  <h3>数学高自由度 vs 物理强约束（两层结构）</h3>
+  <div class="grid2">
+    <div class="card"><h3>语法层：自由</h3><p>数学可以定义任意规则。</p></div>
+    <div class="card"><h3>推导层：被迫</h3><p>一旦选定规则，结论就被锁死。物理约束作用在这一层：解析性、幺正性、对称性（+ Noether）、局域性 + 洛伦兹 + 幺正。</p></div>
+  </div>
+  <p>因此 Wigner"数学不合理的有效性"之谜可重述为：<b>被物理用上的，只是数学中满足强约束的极小一撮。</b></p>
+
+  <h3>幺正性（直观版）</h3>
+  <p>幺正 U 满足 U†U = I：<b>保内积、保范数、可逆</b>，几何上像"旋转"。演化 U(t)=e<sup>−iHt</sup>（Stone 定理）确定、可逆；而<b>测量</b>是投影/塌缩，<b>非幺正、随机、不可逆</b>。</p>
+
+  <!-- 9 -->
+  <h2 id="s9"><span class="n">9</span>量子力学 vs 广义相对论：数学结构对比</h2>
+  <figure>
+    <img src="./assets/physics.jpg" alt="量子力学与广义相对论">
+    <figcaption>量子力学（复希尔伯特空间）与广义相对论（洛伦兹流形）——两套数学结构。</figcaption>
+  </figure>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th></th><th>量子力学（QM）</th><th>广义相对论（GR）</th></tr></thead>
+    <tbody>
+      <tr><th>舞台</th><td>复希尔伯特空间</td><td>4 维光滑洛伦兹流形</td></tr>
+      <tr><th>核心对象</th><td>态矢量、自伴算子</td><td>度规 g<sub>μν</sub>、曲率</td></tr>
+      <tr><th>演化</th><td>幺正 U(t)=e<sup>−iHt</sup></td><td>Einstein 场方程</td></tr>
+      <tr><th>测量</th><td>PVM / POVM</td><td>无对应</td></tr>
+      <tr><th>对称</th><td>Wigner 射影表示</td><td>微分同胚不变</td></tr>
+      <tr><th>代数</th><td>C*-代数 / von Neumann 代数</td><td>张量 / 纤维丛</td></tr>
+      <tr><th>特征</th><td>线性、背景依赖、外部时间</td><td>非线性几何、背景独立、无优先时间切片</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="formula">R<sub>μν</sub> − ½ R g<sub>μν</sub> + Λ g<sub>μν</sub> = (8πG/c⁴) T<sub>μν</sub></div>
+  <p><b>张力：</b>背景依赖 ↔ 背景独立；线性 ↔ 非线性几何；外部时间 ↔ 无优先时间切片。<b>共享语言：</b>李群、纤维丛、作用量原理。<b>量子引力路线：</b>圈量子引力、弦论、函子式量子场论（FQFT）。</p>
+
+  <!-- 10 -->
+  <h2 id="s10"><span class="n">10</span>微分几何入门</h2>
+  <p><b>流形</b>：局部看起来像欧几里得空间的拓扑空间（局部可放"坐标卡"，坐标卡 + 转移映射 ＝ 图册；维数是局部概念）。核心工具链：</p>
+  <ol>
+    <li><b>切空间</b> T<sub>P</sub>M：点 P 处的"速度向量"组成的线性空间；</li>
+    <li><b>向量场 / 微分形式</b>：每点光滑地取切向量 / 余向量；</li>
+    <li><b>度规</b> g：每点定义内积，测长度与角度；</li>
+    <li><b>联络</b>：定义"平行移动"，从而比较不同点的向量；</li>
+    <li><b>曲率</b>：把向量沿闭合回路平行移动一圈后的偏差（holonomy）——测量"绕一圈转了多少"。</li>
+  </ol>
+  <div class="callout">球面<b>局部</b>像平面，<b>整体</b>却弯曲；曲率是"局部平坦性在整体上的破缺"。</div>
+
+  <!-- 11 -->
+  <h2 id="s11"><span class="n">11</span>级数与函数表示</h2>
+  <p><b>最基础的实变函数：</b>六类基本初等函数（幂、指数、对数、三角、反三角、常数）；代数函数 vs 超越函数；分段函数。统一母函数：e<sup>x</sup> 与 ln x 串起指数与三角。</p>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th></th><th>泰勒级数</th><th>傅里叶级数</th></tr></thead>
+    <tbody>
+      <tr><th>基底</th><td>{1, x, x², …}</td><td>{1, cos nx, sin nx}</td></tr>
+      <tr><th>性质</th><td>局部</td><td>全局 / 周期</td></tr>
+      <tr><th>视角</th><td>在一点附近展开</td><td>把函数投影到频率基上</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><b>函数空间坐标视角：</b>展成级数 ＝ 在函数空间里选取一组基、读出坐标。</p>
+  <div class="callout red"><b>反例：</b>e<sup>−1/x²</sup> 在 x=0 处各阶导数都为 0，泰勒级数恒为 0，却在 x≠0 处不为 0——<b>光滑 ≠ 实解析</b>。这解释了为何"在 ℝ 上可展幂级数"只是好函数子类，而在 ℂ 上三件事合一。</div>
+
+  <!-- 12 -->
+  <h2 id="s12"><span class="n">12</span>实函数为何"复化"</h2>
+  <p>先纠正直觉：很多人把"实函数 + 显式公式"当原始，但常常<b>恰恰相反</b>——复函数才是本尊，实函数只是它在实轴上的一刀切片。</p>
+  <ol>
+    <li><b>延拓被唯一性逼出来</b>：复真身（若存在、区域连通）只有一种；换任何别的复公式都会违背原函数或丢掉解析性。</li>
+    <li><b>三合一</b>：ℂ 上"复可导 ⟺ 解析 ⟺ 幂级数"，实世界的"好函数子类"升级为"全局硬约束"。</li>
+    <li><b>实轴的谜团藏在复平面</b>：1/(1+x²) 处处光滑，幂级数收敛半径却只有 1——因为 ±i 处有极点，<b>收敛半径 ＝ 到最近奇点的距离</b>。</li>
+    <li><b>母函数显形</b>：e<sup>z</sup> 一出，sin z、cos z、sinh z、cosh z 都成为 e<sup>iz</sup> 的线性组合。</li>
+  </ol>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th></th><th>性质</th><th>判断标准</th></tr></thead>
+    <tbody>
+      <tr><th>发现（唯一延拓）</th><td>复数是真身</td><td>拆回实数会丢信息 / 拆不回去（如 ζ 零点、收敛半径的成因）</td></tr>
+      <tr><th>记号便利</th><td>复数是工具</td><td>拆回实数完全等价，只是写起来麻烦（如相量法、复频率、FFT）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout gold">真正"人为"的只有复数<b>乘法规则</b>这一条；一旦写下，其余全是被逼出来的后果。复化多数是<b>发现真身</b>，不是数字游戏——但要分清哪些是发现、哪些只是记号便利。</div>
+
+  <!-- 13 -->
+  <h2 id="s13"><span class="n">13</span>数论与素数</h2>
+  <figure>
+    <img src="./assets/primes.jpg" alt="素数的分布">
+    <figcaption>素数是整数的"乘法原子"。</figcaption>
+  </figure>
+  <p><b>算术基本定理：</b>每个大于 1 的整数都能<b>唯一</b>地拆成素数之积，如 60 = 2·2·3·5。于是素数是整数的"乘法原子"，整数在乘法下的结构完全由素数决定。</p>
+  <div class="grid2">
+    <div class="card"><h3>加法：温和</h3><p>相邻整数差恒为 1，规则可预测。</p></div>
+    <div class="card"><h3>乘法：野生</h3><p>复杂度全压在素数分布上；定义极简（只能被 1 和自己整除），行为极深。</p></div>
+  </div>
+  <p>素数是整数"加法结构"与"乘法结构"之间的<b>接口</b>（透过 log / ζ 相连）。</p>
+
+  <h3>素数规律在物理中是否起特殊作用</h3>
+  <p>基本结论：<b>没有哪条物理定律是由素数的算术决定的</b>。素数不是物质、不是力。但存在三层真实连接：</p>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th>层级</th><th>内容</th><th>性质</th></tr></thead>
+    <tbody>
+      <tr><th>最强·谱</th><td>Montgomery–Odlyzko：ζ 非平凡零点间距统计 ≈ 量子混沌能级间距统计（GUE）；Hilbert–Pólya：零点 = 某自伴算子的谱；Selberg 迹公式：闭测地线长度 ↔ 拉普拉斯谱</td><td>真实且深刻</td></tr>
+      <tr><th>工程·生物</th><td>Shor 算法把大数分解化为周期查找；周期蝉 13/17 年避开捕食者周期</td><td>真实，非自然律</td></tr>
+      <tr><th>需澄清</th><td>不是"物理依赖素数"，而是素数分布与量子谱<b>共享同一统计普适类</b></td><td>常见误读</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">桥搭在<b>统计与谱</b>上，不在算术本体上。这正是黎曼猜想为何不止是数论——Hilbert–Pólya 想找一个算子，让素数零点成为它的能级。</div>
+
+  <!-- 14 -->
+  <h2 id="s14"><span class="n">14</span>核心洞察汇总</h2>
+  <ol>
+    <li><b>形式化 = 可审计</b>：Lean 让证明能被机器逐行核验，但"会验证"≠"会理解"。</li>
+    <li><b>复变的质变</b>：复可导 ⟺ 解析 ⟺ 幂级数；苛刻的极限要求换来"局部决定整体"。</li>
+    <li><b>i 是旋转的生成元</b>：i²=−1 是"直角转两下＝掉头"的代数写法。</li>
+    <li><b>加法是平移，乘法是相似</b>：ℂ ＝ ℝ² 加上一个乘法。</li>
+    <li><b>换坐标让运算对角化</b>：直角式为加法、指数式为乘法；ln 把乘变加是同一招。</li>
+    <li><b>延拓是被逼的唯一选择</b>：实函数是切片，复函数是本尊。</li>
+    <li><b>复数不是本体</b>：量子力学里它是"相位的代数"。</li>
+    <li><b>数学自由在语法层，被迫在推导层</b>：物理用到的只是数学的一小撮。</li>
+    <li><b>素数 = 乘法原子</b>：与物理的桥搭在统计与谱上。</li>
+    <li><b>诚实划界</b>：区分"发现"与"记号便利"，是评价一切"数学迁移"的通用标尺。</li>
+  </ol>
+
+  <!-- 15 -->
+  <h2 id="s15"><span class="n">15</span>术语速查表</h2>
+  <div class="wrap-scroll">
+  <table>
+    <thead><tr><th>术语</th><th>一句话解释</th></tr></thead>
+    <tbody>
+      <tr><td>解析函数</td><td>复可导（等价于可展成收敛幂级数）的函数</td></tr>
+      <tr><td>柯西–黎曼方程</td><td>复可导的实部虚部条件</td></tr>
+      <tr><td>解析延拓</td><td>把局部定义的解析函数唯一地扩张到更大区域</td></tr>
+      <tr><td>极点</td><td>洛朗展开中有限个负幂项对应的奇点</td></tr>
+      <tr><td>本性奇点</td><td>洛朗展开含无穷多个负幂项</td></tr>
+      <tr><td>留数</td><td>洛朗展开中 a₋₁ 系数，用于积分</td></tr>
+      <tr><td>保角映射</td><td>局部保持角度不变（旋转+伸缩）的映射</td></tr>
+      <tr><td>幺正</td><td>U†U=I：保内积、可逆，像旋转</td></tr>
+      <tr><td>自伴算子</td><td>对应可观测量，谱为实数</td></tr>
+      <tr><td>流形</td><td>局部像欧几里得空间的拓扑空间</td></tr>
+      <tr><td>度规 / 联络 / 曲率</td><td>定义长度与角度 / 定义平行移动 / 绕回路平行移动的偏差</td></tr>
+      <tr><td>算术基本定理</td><td>整数的素数分解唯一</td></tr>
+      <tr><td>GUE</td><td>高斯幺正系综，随机矩阵的普适统计类</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <hr class="sep">
+  <p class="lead"><b>附：Riemann 曲面的直观</b>——多值函数如 log z 绕原点一圈就换来一个 2πi 的台阶，画不成单值图像；把它的所有分支"摞起来"接成螺旋楼梯，就得到 Riemann 曲面，在它上面 log z 终于单值。这既是解析延拓的产物，也解释了极坐标式"丢掉的唯一性"要以分支割线来偿还。</p>
+
+  <footer>
+    本文由对谈整理 · 力求表述精确 · 对存在争议或未证实之处（如 Hilbert–Pólya 猜想、量子引力路线）已标注为"猜想 / 线索"。
+  </footer>
+</div>
+
+</body>
+</html>
