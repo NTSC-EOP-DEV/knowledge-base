@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库 · Knowledge Base</title>
+<meta name="description" content="NTSC-EOP-DEV 知识库：收集整理的文章、演讲稿与科普长页，支持网页与 Markdown 两种阅读方式。">
+<link rel="stylesheet" href="assets/base.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="./">知识<span>库</span></a>
+    <nav>
+      <a href="./">目录</a>
+      <a href="https://github.com/NTSC-EOP-DEV/knowledge-base" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">NTSC-EOP-DEV · KNOWLEDGE BASE</div>
+    <h1>收集、整理、可读</h1>
+    <p>这里存放我收集整理的知识与文章。每篇都有网页版与 Markdown 两种形式：网页版适合直接通读，Markdown 保留原始结构与出处。</p>
+    <div class="meta">
+      <span><b id="stat-docs">1</b>篇文档</span>
+      <span><b id="stat-cats">1</b>个分类</span>
+      <span>网页 / Markdown 双版本</span>
+      <span id="hint"></span>
+    </div>
+  </section>
+
+  <div class="searchbar">
+    <input id="q" type="search" placeholder="搜索标题、分类或路径…" autocomplete="off" aria-label="搜索文档">
+  </div>
+
+  <section class="catalog" id="catalog" aria-live="polite"></section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <span>目录由仓库文件树自动生成，新增 <code>docs/&lt;分类&gt;/&lt;标题&gt;.md</code> 即会出现在这里。</span>
+    <span><a href="https://github.com/NTSC-EOP-DEV/knowledge-base" target="_blank" rel="noopener">NTSC-EOP-DEV/knowledge-base</a></span>
+  </div>
+</footer>
+
+<script src="assets/catalog.js"></script>
+</body>
+</html>

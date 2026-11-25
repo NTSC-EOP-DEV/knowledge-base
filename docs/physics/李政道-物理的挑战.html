@@ -266,9 +266,18 @@ footer .note{font-size:12px;line-height:1.9;color:rgba(243,237,226,.42);border-t
   html{scroll-behavior:auto}
   .reveal{opacity:1;translate:0 0;transition:none}
 }
+/* 返回知识库 */
+.kb-back{
+  position:fixed;left:18px;top:14px;z-index:95;font-family:var(--sans);font-size:12px;
+  letter-spacing:.08em;color:#f3ede2;background:rgba(16,29,43,.72);padding:7px 14px;
+  border-radius:999px;text-decoration:none;border:0;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:.2s;
+}
+.kb-back:hover{background:var(--cinnabar);color:#fff}
 </style>
 </head>
 <body>
+<a class="kb-back" href="../../index.html">← 知识库</a>
 <div id="progress"></div>
 
 <nav class="nav" aria-label="章节导航">
